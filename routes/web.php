@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WorkshopController;
 use App\Http\Livewire\Admin\Dashboard;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/my-workshops', [WorkshopController::class, 'index']);
+Route::get('/workshop/{id}', [WorkshopController::class, 'show']);
+Route::get('/workshop/{id}/module/{moduleId}', [WorkshopController::class, 'module']);
 
 //admin routes
 

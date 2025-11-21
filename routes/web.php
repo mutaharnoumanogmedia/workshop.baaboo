@@ -5,7 +5,7 @@ use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\WorkshopController;
 use App\Http\Livewire\Admin\Dashboard;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    if(Auth::check()){
+        return redirect()->route('dashboard');
+    }
     return view('welcome');
 })->middleware(['auth', 'verified']);
 
@@ -27,7 +30,7 @@ Route::post('/magic-link', [\App\Http\Controllers\Auth\MagicLinkController::clas
 
 Route::get('/magic-link/verify/{token}', [\App\Http\Controllers\Auth\MagicLinkController::class, 'verify'])
     ->name('magic-link.verify');
-    
+
 Route::get('/dashboard', function () {
     try {
         $roles = \Auth::user()->getRoleNames();

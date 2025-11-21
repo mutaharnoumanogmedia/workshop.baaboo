@@ -2,32 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+
 class WorkshopController extends Controller
 {
     public function index()
-    { 
-        $workshops = array_values($this->demoWorkshops());
-
-        return view('workshops.index', compact('workshops'));
-    }
-
-    public function show(string $id)
     {
-        $workshops = $this->demoWorkshops();
-        $workshop = $workshops[$id] ?? null;
-        abort_if(is_null($workshop), 404);
+        $courses = Course::active()->myCourses()->get();
 
-        $firstModule = $workshop['modules'][0] ?? null;
-        abort_if(is_null($firstModule), 404);
-
-        return view('workshops.show', [
-            'workshop' => $workshop,
-            'module' => $this->prepareModuleContext($workshop, $firstModule),
-            'modules' => $workshop['modules'],
-        ]);
+        return view('workshops.index', compact('courses'));
     }
 
-    public function module(string $id, string $moduleId)
+    public function show($id, $chapterId = null, $videoId = null)
+    {
+        $course = Course::findOrFail($id)->load('chapters.videos');
+        $currentChapter = $chapterId ? $course->chapters->firstWhere('id', $chapterId) : $course->chapters->first();
+        $currentVideo = $videoId && $currentChapter ? $currentChapter->videos->firstWhere('id', $videoId) : ($currentChapter ? $currentChapter->videos->first() : null);
+        return view('workshops.show', compact('course', 'currentChapter', 'currentVideo'));
+    }
+
+    public function module($id,  $moduleId)
     {
         $workshops = $this->demoWorkshops();
         $workshop = $workshops[$id] ?? null;
@@ -316,4 +310,3 @@ class WorkshopController extends Controller
         ];
     }
 }
-

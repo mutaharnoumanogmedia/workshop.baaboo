@@ -19,4 +19,25 @@ class Course extends Model
     {
         return $this->belongsTo(Program::class);
     }
+
+    public function chapters()
+    {
+        return $this->hasMany(Chapter::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeMyCourses($query, $userId = null)
+    {
+        $userId = $userId ?: auth()->id();
+
+        return $query->whereIn('id', function ($subQuery) use ($userId) {
+            $subQuery->select('course_id')
+                ->from('user_courses')
+                ->where('user_id', $userId);
+        });
+    }
 }

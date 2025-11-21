@@ -13,17 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('videos', function (Blueprint $table) {
+        Schema::create('chapter_resources', function (Blueprint $table) {
             $table->id();
             $table->foreignId('chapter_id')->constrained()->onDelete('cascade');
             $table->string('title')->nullable();
+            $table->string('type')->nullable();
             $table->longText('url')->nullable();
-            $table->longText("embed")->nullable();
-            $table->string('vturb_key')->nullable();
-            $table->string('video_type')->nullable(); // e.g., 'mp4', 'youtube', 'vimeo'
-            $table->integer('duration')->nullable(); // duration in seconds
-            $table->string('status')->default('active');
-
+            $table->longText('embed')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -35,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('videos');
+        Schema::dropIfExists('chapter_resources');
     }
 };

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\WorkshopController;
 use App\Http\Livewire\Admin\Dashboard;
 use Illuminate\Support\Facades\Route;
@@ -32,11 +33,13 @@ Route::get('/dashboard', function () {
             return view('editor.dashboard');
         } elseif ($roles->contains('moderator')) {
             return view('moderator.dashboard');
+        } elseif ($roles->contains('user')) {
+            return redirect()->route('user.dashboard');
         } else {
             return abort(403, "Unauthorized action. Your role {" . $roles->join(', ') . "} does not have access.");
         }
     } catch (\Exception $e) {
-        return abort(403, "Unauthorized action. Your role {" . \Auth::user()->getRoleNames() . "} is not recognized.");
+        return abort(403, "Unauthorized action. Your role  " . \Auth::user()->getRoleNames() . "  is not recognized." . $e->getMessage());
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -46,14 +49,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/my-workshops', [WorkshopController::class, 'index']);
-Route::get('/workshop/{id}', [WorkshopController::class, 'show']);
-Route::get('/workshop/{id}/module/{moduleId}', [WorkshopController::class, 'module']);
+
 
 //admin routes
 
 Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
+});
+
+Route::prefix("user")->middleware(['auth', 'verified', 'role:user'])->group(function () {
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+
+    Route::get('/my-workshops', [WorkshopController::class, 'index'])->name('user.workshops');
+    Route::get('/workshop/{id}/{chapter_id?}/{video_id?}', [WorkshopController::class, 'show'])->name('user.workshop.show');
+    Route::get('/workshop/{id}/module/{moduleId}', [WorkshopController::class, 'module'])->name('user.workshop.module');
+    Route::get('/favorites', [App\Http\Controllers\User\FavoriteController::class, 'index'])->name('user.favorites');
+    Route::get('/certificates', [App\Http\Controllers\User\CertificateController::class, 'index'])->name('user.certificates');
+    Route::get('/schedule', [App\Http\Controllers\User\ScheduleController::class, 'index'])->name('user.schedule');
+    Route::get('/downloads', [App\Http\Controllers\User\DownloadController::class, 'index'])->name('user.downloads');
+    Route::get('/settings', [App\Http\Controllers\User\SettingsController::class, 'index'])->name('user.settings');
 });
 
 

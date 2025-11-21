@@ -68,7 +68,7 @@ class User extends Authenticatable
     }
     public function myCourses()
     {
-        return $this->hasMany(Course::class);
+        return $this->hasMany(UserCourse::class);
     }
     public function programs()
     {
@@ -81,5 +81,19 @@ class User extends Authenticatable
         return $query->whereDoesntHave('roles', function ($q) {
             $q->where('name', 'admin');
         });
+    }
+
+
+
+    public function getInitialsAttribute()
+    {
+        $names = explode(' ', $this->name);
+        $initials = '';
+        foreach ($names as $n) {
+            if (strlen($n) > 0) {
+                $initials .= strtoupper($n[0]);
+            }
+        }
+        return $initials;
     }
 }

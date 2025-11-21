@@ -1,28 +1,11 @@
-@extends('layouts.workshop')
+@extends('layouts.user')
 
 @section('title', 'My Workshops')
 
-@push('inline-styles')
-<style>
-    .workshop-card {
-        background-color: white;
-        border-radius: 24px;
-        border: 1px solid rgba(255, 107, 53, 0.15);
-        box-shadow: 0 15px 30px rgba(17, 24, 39, 0.06);
-        padding: 32px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+@push('styles')
+    <style>
 
-    .workshop-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 25px 45px rgba(17, 24, 39, 0.12);
-    }
-
-    .badge-soft {
-        background-color: var(--light-bg);
-        color: var(--primary-orange);
-    }
-</style>
+    </style>
 @endpush
 
 @section('content')
@@ -36,21 +19,23 @@
         </div>
 
         <div class="row g-4">
-            @forelse ($workshops as $workshop)
+            @forelse ($courses as $course)
                 <div class="col-md-6 col-xl-4 d-flex">
                     <article class="workshop-card w-100 d-flex flex-column">
                         <div class="d-flex justify-content-between text-uppercase text-muted small">
-                            <span>{{ $workshop['category'] }}</span>
-                            <span>{{ $workshop['updated'] }}</span>
+                            <span>{{ 'Inital Training' }}</span>
+                            <span>
+                                {{ \Carbon\Carbon::parse($course->created_at)->diffForHumans() }}</span>
                         </div>
-                        <h2 class="mt-3 h4 fw-bold" style="color: #111827;">{{ $workshop['title'] }}</h2>
-                        <p class="text-muted mb-4 flex-grow-1">{{ $workshop['summary'] }}</p>
+                        <h2 class="mt-3 h4 fw-bold" style="color: #111827;">{{ $course->title }}</h2>
+                        <p class="text-muted mb-4 flex-grow-1">{{ Str::substr($course->description, 0, 100) }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <span class="badge rounded-pill badge-soft">{{ $workshop['modulesCount'] }} chapters</span>
+                                <span class="badge rounded-pill badge-soft">{{ $course->chapters->count() }} chapters</span>
                                 <p class="text-muted small mb-0 mt-2">UI preview only</p>
                             </div>
-                            <a href="{{ url('/workshop/' . $workshop['id']) }}" class="btn btn-coursepro rounded-pill px-4">
+                            <a href="{{ route('user.workshop.show', ['id' => $course->id]) }}"
+                                class="btn btn-coursepro rounded-pill px-4">
                                 Start now
                             </a>
                         </div>

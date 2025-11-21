@@ -3,7 +3,7 @@
 @if ($currentVideo)
     @section('title', $currentVideo->title . ' - ' . $course->title)
 @endif
-@if ($currentVideo->vturb_key)
+@if ($currentVideo && $currentVideo->vturb_key)
     @section('header')
         <link rel="preload"
             href="https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/player.js"

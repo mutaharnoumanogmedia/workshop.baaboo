@@ -276,7 +276,7 @@
                                                                 of
                                                                 {{ $currentChapter->videos->count() }}</span>
                                                         </div>
-                                                       
+
                                                     </div>
                                                     <p class="text-muted">{{ $currentVideo->description }}</p>
 
@@ -284,7 +284,7 @@
                                                 <div class="col-md-4">
                                                     <h5 class="fw-bold mb-3">Up Next</h5>
                                                     <div class="list-group">
-                                                        @foreach ($currentChapter->videos as $video)
+                                                        @foreach ($currentChapter->videos->where('video_type', 'video') as $video)
                                                             <a href="{{ route('user.workshop.show', ['id' => $course->id, 'chapter_id' => $currentChapter->id, 'video_id' => $video->id]) }}"
                                                                 class="list-group-item list-group-item-action d-flex align-items-center bg-transparent @if ($video->id === $currentVideo->id) lesson-active @endif p-2 mb-2">
                                                                 <div class="flex-shrink-0">
@@ -310,8 +310,70 @@
 
 
                         <div class="tab-pane fade show p-3 border rounded" id="audio" role="tabpanel">
-                            <h5>Audio Files</h5>
-                            <p>Place your audio players or links here.</p>
+                            <div class="row mb-5">
+                                <div class="col-12">
+                                    @if ($currentAudio)
+                                        <div class="current-video-card p-lg-4">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <h4 class="fw-bold mb-3">{{ $currentAudio->title }}</h4>
+                                                    <div class="video-thumbnail mb-3 position-relative">
+                                                        <div id="vid_{{ $currentAudio->vturb_key }}"
+                                                            style="position: relative; width: 100%; padding: 56.25% 0 0;">
+                                                            <img id="thumb_{{ $currentAudio->vturb_key }}"
+                                                                src="https://images.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentAudio->vturb_key }}/thumbnail.jpg"
+                                                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;"
+                                                                alt="thumbnail">
+                                                            <div id="backdrop_{{ $currentAudio->vturb_key }}"
+                                                                style=" -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%; ">
+                                                            </div>
+                                                        </div>
+                                                        <script type="text/javascript" id="scr_{{ $currentAudio->vturb_key }}">
+                                                            var s = document.createElement("script");
+                                                            s.src =
+                                                                "https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentAudio->vturb_key }}/player.js",
+                                                                s.async = !0, document.head.appendChild(s);
+                                                        </script>
+
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <div>
+                                                            <span class="badge bg-primary me-2">Video
+                                                                {{ $currentAudio->order }}</span>
+                                                            <span class="badge bg-secondary"> {{ $currentAudio->order }}
+                                                                of
+                                                                {{ $currentChapter->videos->count() }}</span>
+                                                        </div>
+
+                                                    </div>
+                                                    <p class="text-muted">{{ $currentAudio->description }}</p>
+
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h5 class="fw-bold mb-3">Up Next</h5>
+                                                    <div class="list-group">
+                                                        @foreach ($currentChapter->videos->where('video_type', 'audio') as $audio)
+                                                            <a href="{{ route('user.workshop.show', ['id' => $course->id, 'chapter_id' => $currentChapter->id, 'video_id' => $audio->id]) }}"
+                                                                class="list-group-item list-group-item-action d-flex align-items-center bg-transparent @if ($audio->id === $currentAudio->id) lesson-active @endif p-2 mb-2">
+                                                                <div class="flex-shrink-0">
+                                                                    <img src="https://placehold.co/80x45/FF8C5A/white?text={{ $audio->order }}"
+                                                                        class="rounded me-3" alt="Thumbnail">
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">{{ $audio->title }}</h6>
+                                                                    <small
+                                                                        class="text-muted">{{ $audio->duration }}</small>
+                                                                </div>
+                                                            </a>
+                                                        @endforeach
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
 
                         <div class="tab-pane fade p-3 border rounded" id="pdfs" role="tabpanel">

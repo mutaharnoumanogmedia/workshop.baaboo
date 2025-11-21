@@ -21,6 +21,13 @@ Route::get('/', function () {
     return view('welcome');
 })->middleware(['auth', 'verified']);
 
+
+Route::post('/magic-link', [\App\Http\Controllers\Auth\MagicLinkController::class, 'send'])
+    ->name('magic-link.send')->middleware("throttle:20,60");
+
+Route::get('/magic-link/verify/{token}', [\App\Http\Controllers\Auth\MagicLinkController::class, 'verify'])
+    ->name('magic-link.verify');
+    
 Route::get('/dashboard', function () {
     try {
         $roles = \Auth::user()->getRoleNames();

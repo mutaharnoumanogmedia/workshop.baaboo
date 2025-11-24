@@ -64,7 +64,11 @@ class MagicLinkController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $magicLink,
-                'message' => 'We’ve sent you a magic link! Please check your email inbox or spam folder.'
+                'message' =>
+                $request->has('send_email') && $request->send_email == "1" ?
+                    'We’ve sent you a magic link! Please check your email inbox or spam folder.'
+                    :
+                    'Magic link generated successfully, no email sent. Please use the link to log in.'
             ]);
         }
         return back()->with('success', '<b>We’ve sent you a magic link!</b>

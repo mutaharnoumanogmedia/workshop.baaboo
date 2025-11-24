@@ -60,7 +60,7 @@ class MagicLinkService
     {
 
 
-        $userResponse = (new CustomerService())->getCustomerByEmail($email);
+        $userResponse = (new UserAccountService())->getUserAccountByEmail($email);
         //    dd("User response from API: ", $userResponse);
 
         $userData = $userResponse->getData()->customer;

@@ -192,8 +192,6 @@
                 </div>
 
                 <div class="">
-
-
                     <!-- Nav Pills -->
                     <ul class="nav nav-pills mb-3" id="otherModulesTabs" role="tablist">
                         <li class="nav-item" role="presentation">

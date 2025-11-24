@@ -30,7 +30,7 @@ class MagicLinkController extends Controller
         $request->validate(['email' => 'required|email']);
 
 
-        $response = (new UserAccountService())->getUserAccountByEmail($request->email); // verify from API in lv.baaboo
+        $response = (new UserAccountService())->getUserAccountByEmail($request->email); // response from login.baaboo api
 
         $response = $response->getData();
         if (!isset($response->customer)) {
@@ -42,7 +42,7 @@ class MagicLinkController extends Controller
         // $user = (new User)->newInstance($response->customer, true);
         $user = new User([
             'id' => $customerData->id,
-            'name' => $customerData->first_name . ' ' . $customerData->last_name,
+            'name' => $customerData->name ?  $customerData->name : $customerData->first_name . ' ' . $customerData->last_name,
             'email' => $customerData->email,
             'password' => bcrypt("123456789")
         ]);
@@ -54,7 +54,7 @@ class MagicLinkController extends Controller
             Mail::to($user->email)->send(new MagicLinkEmail($magicLink));
             // \App\Jobs\SendMagicLinkEmail::dispatch($user->email, $magicLink);
         } catch (\Exception $e) {
-            return back()->with('error', 'We were unable to send the magic link email at this time. Please try again shortly.');
+            return response(['error', 'We were unable to send the magic link email at this time. Please try again shortly.', 'exception' => $e->getMessage()], 500);
         }
 
         if ($request->is('api/*')) {

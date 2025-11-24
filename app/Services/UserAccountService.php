@@ -18,6 +18,13 @@ class UserAccountService
             // ****** part 1 *******//
 
             //check that the any user is existing in login.baaboo with this email 
+            if (User::where('email', $email)->exists()) {
+                return response()->json([
+                    'success' => true,
+                    "customer" => User::where('email', $email)->first(),
+                    "message" => "UserAccount found in local DB"
+                ]);
+            }
             $url = env("APP_LOGIN_URL", 'https://login.baaboo.com') . "/api/get-user-by-email";
             //making http request to the login.baaboo api with custom TOKEN in header and data in body
             $response = Http::withoutVerifying()->withHeaders([
@@ -53,14 +60,13 @@ class UserAccountService
                             'twitter' => $customerData["profile"]['twitter'] ?? "",
                             'phone' => $customerData["profile"]['phone'] ?? null
                         ];
-                        if (!User::where('email', $customer['email'])->exists()) {
-                            User::insert([
-                                'id' => $customer['id'],
-                                'name' => $customer['name'],
-                                'email' => $customer['email'],
-                                'password' => bcrypt(time())
-                            ]);
-                        }
+
+                        User::insert([
+                            'id' => $customer['id'],
+                            'name' => $customer['name'],
+                            'email' => $customer['email'],
+                            'password' => bcrypt(time())
+                        ]);
                     } else {
                         $customer = [
 

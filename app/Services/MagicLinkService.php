@@ -70,7 +70,7 @@ class MagicLinkService
         return new \App\Models\User(
             [
                 'id' => $userData->id,
-                'name' => $userData->first_name . " " . $userData->last_name,
+                'name' => $userData->name  ? $userData->name : $userData->first_name . " " . $userData->last_name,
                 'email' => $userData->email,
                 'first_name' => $userData->first_name,
                 'last_name' => $userData->last_name,

@@ -51,7 +51,10 @@ class MagicLinkController extends Controller
 
         // Dispatch job to send email with magic link
         try {
-            Mail::to($user->email)->send(new MagicLinkEmail($magicLink));
+            if ($request->has('send_email') && $request->send_email == "1") {
+                //do nothing
+                Mail::to($user->email)->send(new MagicLinkEmail($magicLink));
+            }
             // \App\Jobs\SendMagicLinkEmail::dispatch($user->email, $magicLink);
         } catch (\Exception $e) {
             return response(['error', 'We were unable to send the magic link email at this time. Please try again shortly.', 'exception' => $e->getMessage()], 500);

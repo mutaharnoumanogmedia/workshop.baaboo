@@ -25,6 +25,7 @@ class UserAccountService
                     "message" => "UserAccount found in local DB"
                 ]);
             }
+            
             $url = env("APP_LOGIN_URL", 'https://login.baaboo.com') . "/api/get-user-by-email";
             //making http request to the login.baaboo api with custom TOKEN in header and data in body
             $response = Http::withoutVerifying()->withHeaders([

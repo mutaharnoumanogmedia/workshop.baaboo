@@ -73,9 +73,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserCourse::class);
     }
+    public function myPrograms()
+    {
+        return $this->hasMany(UserProgram::class);
+    }
     public function programs()
     {
-        return $this->hasMany(Program::class);
+        return $this->hasMany(UserProgram::class);
+    }
+    public function courses()
+    {
+        return $this->hasMany(UserCourse::class);
     }
 
 

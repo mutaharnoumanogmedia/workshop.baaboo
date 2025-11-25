@@ -12,7 +12,7 @@ use App\Mail\MagicLinkEmail;
 use App\Services\UserAccountService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Facades\Validator;
 
 class MagicLinkController extends Controller
 {
@@ -27,26 +27,30 @@ class MagicLinkController extends Controller
     public function send(Request $request)
     {
 
-        $request->validate(['email' => 'required|email']);
-
-
-        $response = (new UserAccountService())->getUserAccountByEmail($request->email); // response from login.baaboo api
-
-        $response = $response->getData();
-        if (!isset($response->customer)) {
-            return back()->with('error', 'No customer account was found associated with the provided email address.');
+        
+        $validation  = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+        if ($validation->fails()) {
+            return response()->json(['error' => 'email is required.'], 422);
         }
 
-        $customerData = $response->customer;
+
+       $userData = [
+            'email' => $request->email,
+            'first_name' => substr($request->email, 0, strpos($request->email, '@')),
+            'last_name' => ''
+       ];
 
         // $user = (new User)->newInstance($response->customer, true);
-        $user = new User([
-            'id' => $customerData->id,
-            'first_name' => $customerData->first_name,
-            'last_name' => $customerData->last_name ?? "",
-            'email' => $customerData->email,
+        $user = User::firstOrCreate(
+            ['email' => $userData['email']],
+            [
+            'first_name' => $userData['first_name'],
+            'last_name' => $userData['last_name'] ?? "",
             'password' => bcrypt("123456789")
-        ]);
+            ]
+        );
 
         $magicLink = $this->magicLinkService->create($user);
 

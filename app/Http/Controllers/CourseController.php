@@ -90,7 +90,7 @@ class CourseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'course_id' => 'required|integer|exists:courses,id',
+            'course_id' => 'required|exists:courses,sku',
         ]);
 
         if ($validator->fails()) {
@@ -110,7 +110,7 @@ class CourseController extends Controller
             ]
         );
         //attach the course to the user
-        $course = Course::find($request->course_id);
+        $course = Course::where("sku" , $request->course_id)->first();
         if (!$course) {
             return response()->json([
                 'success' => false,

@@ -15,11 +15,22 @@
             --dark-orange: #E55A2B;
             --light-orange: #FF8C5A;
             --light-bg: #FFF5F0;
+            --bs-primary-rgb: rgba(255, 107, 53, 1);
         }
 
         body {
             background-color: #f8f9fa;
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .bg-primary {
+            background-color: var(--primary-orange) !important;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+            background-color: var(--primary-orange);
+            color: white;
+        }
+        .nav-link{
+            color: var(--primary-orange);
         }
 
         .navbar-coursepro {
@@ -245,6 +256,7 @@
             color: var(--primary-orange) !important;
             font-weight: 700;
         }
+
     </style>
     @stack('styles')
 </head>
@@ -286,21 +298,24 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item bg-primary text-white" href="#">
                                         <i class="bi bi-person me-2"></i> {{ Auth::user()->full_name }}
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" href="#"><i
-                                            class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a>
-                                </li>
-                                <li>
+                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('user.dashboard') }}"><i
+                                            class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+                                </li>
+                                {{-- <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a>
+                                </li> --}}
+                                {{-- <li>
+                                    <hr class="dropdown-divider">
+                                </li> --}}
                                 <li><a class="dropdown-item" href="javascript:void(0)"
                                         onclick="document.getElementById('logout-form').submit()"><i
                                             class="bi bi-box-arrow-right me-2"></i>Sign

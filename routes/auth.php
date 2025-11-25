@@ -17,8 +17,8 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    // Route::get('login', [AuthenticatedSessionController::class, 'create'])
-    //             ->name('login');
+    Route::get('user/login', [AuthenticatedSessionController::class, 'create'])
+                ->name('user.login');
     Route::get('login', function () {
         return redirect()->away('https://login.baaboo.com?key=workshops');
     })->name('login');

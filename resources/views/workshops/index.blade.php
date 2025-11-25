@@ -32,7 +32,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <span class="badge rounded-pill badge-soft">{{ $course->chapters->count() }} chapters</span>
-                                <p class="text-muted small mb-0 mt-2">UI preview only</p>
+                                
                             </div>
                             <a href="{{ route('user.workshop.show', ['id' => $course->id]) }}"
                                 class="btn btn-coursepro rounded-pill px-4">

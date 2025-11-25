@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    @yield("header")
+    @yield('header')
     <style>
         :root {
             --primary-orange: #FF6B35;
@@ -199,14 +199,12 @@
             /* or your sidebar background */
             border-right: 1px solid #ddd;
             z-index: 1000;
-            /* keep on top */
         }
 
-        .content-wrapper {
+        /* .content-wrapper {
             margin-left: 250px;
             width: calc(100% - 250px);
-            /* same width as sidebar */
-        }
+        } */
 
         @media (max-width: 992px) {
             .content-wrapper {
@@ -233,65 +231,95 @@
             background-color: var(--light-bg);
             color: var(--primary-orange);
         }
+
+        nav .nav-link {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        nav .nav-link:hover {
+            color: var(--primary-orange);
+        }
+
+        nav .nav-link.active {
+            color: var(--primary-orange) !important;
+            font-weight: 700;
+        }
     </style>
     @stack('styles')
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-coursepro navbar-expand-lg">
+    <nav class="navbar navbar-expand-sm  navbar-light navbar-coursepro">
         <div class="container-fluid">
-
-            <a class="navbar-brand fw-bold" href="#" style="color: var(--primary-orange);">
-                <i class="fas fa-graduation-cap"></i> {{ env('APP_NAME') }}
+            <a class="navbar-brand fw-bold me-5" href="#" style="color: var(--primary-orange);">
+                <img src="{{ url('template/logo.png') }}" class="h-auto img-fluid" style="width: 100px" alt="logo">
             </a>
-            <div class="ms-auto d-flex align-items-center">
-                <button class="btn btn-link position-relative me-3">
-                    <i class="fas fa-bell" style="color: var(--primary-orange); font-size: 20px;"></i>
-                    <span
-                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
-                </button>
-                <div class="d-flex align-items-center ms-auto">
-                    <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
-                            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="user-avatar me-2">{{ Auth::user()->initials }}</div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link @if (request()->routeIs('user.dashboard')) active @endif"
+                            href="{{ route('user.dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if (request()->routeIs('user.workshop*')) active @endif"
+                            href="{{ route('user.workshops') }}">Workshops</a>
+                    </li>
 
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="bi bi-person me-2"></i> {{ Auth::user()->full_name }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i
-                                        class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-                            </li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a>
-                            </li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Sign
-                                    Out</a></li>
-                        </ul>
+                </ul>
+                <div class="ms-auto d-flex align-items-center">
+                    {{-- <button class="btn btn-link position-relative me-3">
+                        <i class="fas fa-bell" style="color: var(--primary-orange); font-size: 20px;"></i>
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                    </button> --}}
+                    <div class="d-flex align-items-center ms-auto">
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                                id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="user-avatar me-2">{{ Auth::user()->initials }}</div>
+
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bi bi-person me-2"></i> {{ Auth::user()->full_name }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#"><i
+                                            class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="javascript:void(0)"
+                                        onclick="document.getElementById('logout-form').submit()"><i
+                                            class="bi bi-box-arrow-right me-2"></i>Sign
+                                        Out</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-            <button class="btn sidebar-toggle d-lg-none me-2" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
     </nav>
+
     <div class="overlay"></div>
 
     <main>
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <!-- Sidebar -->
-                <div class="col-lg-2 col-xl-2 p-0 sidebar " id="sidebar">
+                {{-- <div class="col-lg-2 col-xl-2 p-0 sidebar " id="sidebar">
                     <div class="p-3 border-bottom">
                         <h6 class="mb-0 fw-bold">Menu</h6>
                     </div>
@@ -345,12 +373,10 @@
                                 class="">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
+                           
                         </li>
                     </ul>
-                </div>
+                </div> --}}
                 <div class="content-wrapper p-lg-4">
                     <div class="container-fluid">
                         @yield('content')
@@ -361,11 +387,13 @@
     </main>
 
     <footer class="py-5 text-center text-muted small position-relative bottom-0 w-100 bg-light">
-        © {{ now()->year }} Prototype — {{ env('APP_NAME') }}.
+        © {{ now()->year }} — {{ env('APP_NAME') }}.
     </footer>
-
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+    {{-- <script>
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -379,7 +407,7 @@
             sidebar.classList.remove('show');
             overlay.classList.remove('show');
         });
-    </script>
+    </script> --}}
     @stack('scripts')
 
 </body>

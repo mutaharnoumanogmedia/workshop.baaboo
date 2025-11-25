@@ -320,75 +320,49 @@
                             <!-- Current Video Section -->
                             @if ($currentVideo)
                                 <div class="row mb-5 gy-4 align-items-start">
-                                    <div class="col-lg-8">
+                                    <div class="col-lg-12">
                                         <div class="current-video-card p-lg-4 mobile-sticky-video">
                                             <h4 class="fw-bold mb-3">{{ $currentVideo->title }}</h4>
                                             <div class="video-thumbnail mb-3 position-relative">
-                                                        <div id="vid_{{ $currentVideo->vturb_key }}"
-                                                            style="position: relative; width: 100%; padding: 56.25% 0 0;">
-                                                            <img id="thumb_{{ $currentVideo->vturb_key }}"
-                                                                src="https://images.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/thumbnail.jpg"
-                                                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;"
-                                                                alt="thumbnail">
-                                                            <div id="backdrop_{{ $currentVideo->vturb_key }}"
-                                                                style=" -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%; ">
-                                                            </div>
-                                                        </div>
-                                                        <script type="text/javascript" id="scr_{{ $currentVideo->vturb_key }}">
-                                                            var s = document.createElement("script");
-                                                            s.src =
-                                                                "https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/player.js",
-                                                                s.async = !0, document.head.appendChild(s);
-                                                        </script>
-
+                                                <div id="vid_{{ $currentVideo->vturb_key }}"
+                                                    style="position: relative; width: 100%; padding: 56.25% 0 0;">
+                                                    <img id="thumb_{{ $currentVideo->vturb_key }}"
+                                                        src="https://images.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/thumbnail.jpg"
+                                                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;"
+                                                        alt="thumbnail">
+                                                    <div id="backdrop_{{ $currentVideo->vturb_key }}"
+                                                        style=" -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%; ">
                                                     </div>
                                                 </div>
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <div>
-                                                    <span class="badge bg-primary me-2">Video
-                                                        {{ $currentVideo->order }}</span>
-                                                    <span class="badge bg-secondary"> {{ $currentVideo->order }}
-                                                        of
-                                                        {{ $currentChapter->videos->count() }}</span>
-                                                </div>
+                                                <script type="text/javascript" id="scr_{{ $currentVideo->vturb_key }}">
+                                                    var s = document.createElement("script");
+                                                    s.src =
+                                                        "https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/player.js",
+                                                        s.async = !0, document.head.appendChild(s);
+                                                </script>
 
                                             </div>
-                                            <p class="text-muted">{{ $currentVideo->description }}</p>
                                         </div>
+                                       
+                                        <p class="text-muted">{{ $currentVideo->description }}</p>
                                     </div>
-                                    <!-- <div class="col-lg-4">
-                                        <div class="current-video-card p-4 h-100">
-                                            <h5 class="fw-bold mb-3">Course Progress</h5>
-                                            <p class="small text-muted mb-2">Keep track of your learning journey.</p>
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <span class="small">Overall progress</span>
-                                                <span class="small fw-bold">0%</span>
-                                            </div>
-                                            <div class="progress mb-4" style="height: 8px;">
-                                                <div class="progress-bar" role="progressbar" style="width: 0%;"
-                                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <div class="d-flex justify-content-between small text-muted">
-                                                <span>Completed lessons</span>
-                                                <span>0/{{ $currentChapter->videos->count() }}</span>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                 </div>
                             @endif
-
-                            <div class="d-lg-none mt-4">
-                                @include('workshops.partials.course-outline', [
-                                    'course' => $course,
-                                    'currentChapter' => $currentChapter,
-                                    'currentVideo' => $currentVideo,
-                                    'idSuffix' => 'mobile',
-                                ])
-                            </div>
                         </div>
 
 
-                        <div class="tab-pane fade show p-3 border rounded" id="audio" role="tabpanel">
+
+
+                        <div class="d-lg-none mt-4">
+                            @include('workshops.partials.course-outline', [
+                                'course' => $course,
+                                'currentChapter' => $currentChapter,
+                                'currentVideo' => $currentVideo,
+                                'idSuffix' => 'mobile',
+                            ])
+                        </div>
+
+                        <div class="tab-pane fade p-3 border rounded" id="audio" role="tabpanel">
                             <div class="row mb-5 gy-4">
                                 <div class="col-12">
                                     @if ($currentAudio)
@@ -424,9 +398,9 @@
                                                                 {{ $currentChapter->videos->count() }}</span>
                                                         </div>
 
-                                            </div>
-                                            <p class="text-muted">{{ $currentAudio->description }}</p>
-                                        </div>
+                                                    </div>
+                                                    <p class="text-muted">{{ $currentAudio->description }}</p>
+                                                </div>
                                     @endif
                                 </div>
                             </div>
@@ -472,32 +446,37 @@
 
                             </div>
                         </div>
+                        <div class="tab-pane fade p-3 border rounded" id="text" role="tabpanel">
+                            <h5>Text Explanations</h5>
+                            <p>Place your text-based module content here.</p>
+                        </div>
                     </div>
 
-                    <div class="tab-pane fade p-3 border rounded" id="text" role="tabpanel">
-                        <h5>Text Explanations</h5>
-                        <p>Place your text-based module content here.</p>
-                    </div>
+
 
                 </div>
+
+
+
             </div>
-
-
-
         </div>
+
+
+
+    </div>
     </div>
     </div>
 @endsection
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             if (typeof bootstrap === 'undefined') {
                 return;
             }
 
-            document.querySelectorAll('.toggle-sections-btn[data-outline-target]').forEach(function (btn) {
-                btn.addEventListener('click', function () {
+            document.querySelectorAll('.toggle-sections-btn[data-outline-target]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-outline-target');
                     const container = document.getElementById(targetId);
 
@@ -510,14 +489,18 @@
                         return;
                     }
 
-                    const shouldExpand = Array.from(collapses).some(el => !el.classList.contains('show'));
+                    const shouldExpand = Array.from(collapses).some(el => !el.classList.contains(
+                        'show'));
 
                     collapses.forEach(el => {
-                        const instance = bootstrap.Collapse.getOrCreateInstance(el, {toggle: false});
+                        const instance = bootstrap.Collapse.getOrCreateInstance(el, {
+                            toggle: false
+                        });
                         shouldExpand ? instance.show() : instance.hide();
                     });
 
-                    this.textContent = shouldExpand ? 'Collapse all sections' : 'Expand all sections';
+                    this.textContent = shouldExpand ? 'Collapse all sections' :
+                        'Expand all sections';
                 });
             });
         });

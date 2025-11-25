@@ -5,11 +5,11 @@
 
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold">Welcome back, John!</h2>
+        <h2 class="fw-bold">Welcome back, {{Auth::user()->first_name}}!</h2>
         <p class="text-muted">Continue your learning journey</p>
     </div>
 
-    <!-- Stats Cards -->
+    {{-- <!-- Stats Cards -->
     <div class="row mb-4">
         <div class="col-md-3 col-sm-6">
             <div class="stat-card">
@@ -63,11 +63,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Continue Learning -->
     <div class="mb-4">
-        <h4 class="fw-bold mb-3">Continue Learning</h4>
+        <h4 class="fw-bold mb-3">My Workshops</h4>
         <div class="row">
             @forelse ($myCourses as $course)
                 <div class="col-md-6 col-xl-4 d-flex">
@@ -82,7 +82,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <span class="badge rounded-pill badge-soft">{{ $course->chapters->count() }} chapters</span>
-                                <p class="text-muted small mb-0 mt-2">UI preview only</p>
+                               
                             </div>
                             <a href="{{ route('user.workshop.show', ['id' => $course->id]) }}"
                                 class="btn btn-coursepro rounded-pill px-4">
@@ -103,7 +103,7 @@
     </div>
 
     <!-- All My Workshops -->
-    <div class="mb-4">
+    {{-- <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="fw-bold">More workshops</h4>
             <div class="btn-group" role="group">
@@ -248,5 +248,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection

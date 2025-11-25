@@ -28,26 +28,122 @@
             height: 100%;
         }
 
-        .chapter-item {
-            border-left: 3px solid transparent;
-            transition: all 0.3s;
-            position: relative;
+        .course-outline {
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+
+        .section {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            width: 100%;
+            border: none;
+            background: none;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
             cursor: pointer;
+            transition: background-color 0.2s ease;
         }
 
-        .chapter-item:hover {
-            background-color: var(--light-bg);
+        .section-header:hover,
+        .section-header:focus {
+            background-color: #f8fafc;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .section-meta {
+            font-size: 0.82rem;
+            color: #94a3b8;
+        }
+
+        .section-chevron {
+            font-size: 1rem;
+            color: #94a3b8;
+            transition: transform 0.2s ease;
+        }
+
+        .section-header[aria-expanded='true'] .section-chevron {
+            transform: rotate(180deg);
+        }
+
+        .lessons {
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0.75rem 0;
+        }
+
+        .lesson-item {
+            padding: 0.85rem 1.25rem;
+            border-left: 3px solid transparent;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .lesson-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .lesson-item.active {
+            background-color: #fff7f2;
             border-left-color: var(--primary-orange);
         }
 
-        .chapter-item.active {
-            background-color: var(--light-bg);
-            border-left-color: var(--primary-orange);
+        .lesson-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
         }
 
-        .chapter-link {
-            position: absolute;
-            inset: 0;
+        .lesson-index {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #edf2f7;
+            color: #475569;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .lesson-body {
+            flex: 1;
+        }
+
+        .lesson-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .lesson-details {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            text-transform: capitalize;
+        }
+
+        .lesson-duration {
+            font-size: 0.82rem;
+            color: #475569;
+            white-space: nowrap;
         }
 
         .current-video-card {
@@ -120,21 +216,31 @@
             opacity: 1;
         }
 
-        #chapters-sidenav {
-            max-height: 70vh;
+        .chapters-sidebar .chapters-list {
+            max-height: 75vh;
             overflow-y: auto;
         }
 
-        @media (max-width: 480px) {
-            #chapters-sidenav {
-                height: 150px;
-                overflow: auto;
+        .mobile-sticky-video {
+            position: relative;
+        }
+
+        @media (max-width: 991px) {
+            .mobile-sticky-video {
+                position: sticky;
+                top: 60px;
+                z-index: 10;
+                background: #fff;
+                padding-top: 1rem;
+            }
+
+            .chapters-sidebar .chapters-list {
+                max-height: none;
             }
 
             .container-pdf-viewer {
                 width: 100%;
                 height: 600px;
-                /* overflow: auto; */
             }
         }
     </style>
@@ -142,47 +248,19 @@
 
 @section('content')
     <div class="">
-        <div class="row">
+        <div class="row g-4 align-items-start">
             <!-- chapters-Sidebar -->
-            <div class="col-lg-3 col-xl-2 chapters-sidebar p-0">
-                <div class="p-3">
-                    <h5 class="fw-bold mb-3" style="color: var(--primary-orange);">Course Content</h5>
-
-                    <!-- Progress Section -->
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="small">Course Progress</span>
-                            <span class="small fw-bold">0%</span>
-                        </div>
-                        <div class="progress" style="height: 8px;">
-                            <div class="progress-bar" role="progressbar" style="width: 35%;" aria-valuenow="35"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-
-                    <!-- Chapters List -->
-                    <div class="chapters-list" id="chapters-sidenav">
-                        @foreach ($course->chapters as $chapter)
-                            <a href="{{ route('user.workshop.show', ['id' => $course->id, 'chapter_id' => $chapter->id]) }}"
-                                class="d-block text-decoration-none chapter-item p-3  @if ($chapter->id === $currentChapter->id) active @endif">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1 fw-bold">Chapter {{ $loop->iteration }}: {{ $chapter->title }}
-                                        </h6>
-                                        <p class="mb-0 small text-muted">0/{{ $chapter->videos->count() }} lessons
-                                            completed
-                                        </p>
-                                    </div>
-                                    <i class="bi bi-check-circle-fill text-success"></i>
-                                </div>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
+            <div class="col-12 col-lg-3 col-xl-3 chapters-sidebar p-0 d-none d-lg-block">
+                @include('workshops.partials.course-outline', [
+                    'course' => $course,
+                    'currentChapter' => $currentChapter,
+                    'currentVideo' => $currentVideo,
+                    'idSuffix' => 'desktop',
+                ])
             </div>
 
             <!-- Main Content -->
-            <div class="col-lg-9 col-xl-10 main-content p-lg-4 p-0">
+            <div class="col-12 col-lg-9 col-xl-9 main-content p-lg-4 p-0">
                 <div class="row">
                     <div class="col-12">
                         <h2 class="fw-bold mb-4">
@@ -241,13 +319,11 @@
                         <div class="tab-pane fade show active p-3 border rounded" id="video" role="tabpanel">
                             <!-- Current Video Section -->
                             @if ($currentVideo)
-                                <div class="row mb-5">
-                                    <div class="col-12">
-                                        <div class="current-video-card p-lg-4">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <h4 class="fw-bold mb-3">{{ $currentVideo->title }}</h4>
-                                                    <div class="video-thumbnail mb-3 position-relative">
+                                <div class="row mb-5 gy-4 align-items-start">
+                                    <div class="col-lg-8">
+                                        <div class="current-video-card p-lg-4 mobile-sticky-video">
+                                            <h4 class="fw-bold mb-3">{{ $currentVideo->title }}</h4>
+                                            <div class="video-thumbnail mb-3 position-relative">
                                                         <div id="vid_{{ $currentVideo->vturb_key }}"
                                                             style="position: relative; width: 100%; padding: 56.25% 0 0;">
                                                             <img id="thumb_{{ $currentVideo->vturb_key }}"
@@ -266,53 +342,58 @@
                                                         </script>
 
                                                     </div>
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <div>
-                                                            <span class="badge bg-primary me-2">Video
-                                                                {{ $currentVideo->order }}</span>
-                                                            <span class="badge bg-secondary"> {{ $currentVideo->order }}
-                                                                of
-                                                                {{ $currentChapter->videos->count() }}</span>
-                                                        </div>
-
-                                                    </div>
-                                                    <p class="text-muted">{{ $currentVideo->description }}</p>
-
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <h5 class="fw-bold mb-3">Up Next</h5>
-                                                    <div class="list-group">
-                                                        @foreach ($currentChapter->videos->where('video_type', 'video') as $video)
-                                                            <a href="{{ route('user.workshop.show', ['id' => $course->id, 'chapter_id' => $currentChapter->id, 'video_id' => $video->id]) }}"
-                                                                class="list-group-item list-group-item-action d-flex align-items-center bg-transparent @if ($video->id === $currentVideo->id) lesson-active @endif p-2 mb-2">
-                                                                <div class="flex-shrink-0">
-                                                                    <img src="https://placehold.co/80x45/FF8C5A/white?text={{ $video->order }}"
-                                                                        class="rounded me-3" alt="Thumbnail">
-                                                                </div>
-                                                                <div class="flex-grow-1">
-                                                                    <h6 class="mb-1">{{ $video->title }}</h6>
-                                                                    <small
-                                                                        class="text-muted">{{ $video->duration }}</small>
-                                                                </div>
-                                                            </a>
-                                                        @endforeach
-
-                                                    </div>
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div>
+                                                    <span class="badge bg-primary me-2">Video
+                                                        {{ $currentVideo->order }}</span>
+                                                    <span class="badge bg-secondary"> {{ $currentVideo->order }}
+                                                        of
+                                                        {{ $currentChapter->videos->count() }}</span>
                                                 </div>
+
                                             </div>
+                                            <p class="text-muted">{{ $currentVideo->description }}</p>
                                         </div>
                                     </div>
+                                    <!-- <div class="col-lg-4">
+                                        <div class="current-video-card p-4 h-100">
+                                            <h5 class="fw-bold mb-3">Course Progress</h5>
+                                            <p class="small text-muted mb-2">Keep track of your learning journey.</p>
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span class="small">Overall progress</span>
+                                                <span class="small fw-bold">0%</span>
+                                            </div>
+                                            <div class="progress mb-4" style="height: 8px;">
+                                                <div class="progress-bar" role="progressbar" style="width: 0%;"
+                                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="d-flex justify-content-between small text-muted">
+                                                <span>Completed lessons</span>
+                                                <span>0/{{ $currentChapter->videos->count() }}</span>
+                                            </div>
+                                        </div>
+                                    </div> -->
                                 </div>
                             @endif
+
+                            <div class="d-lg-none mt-4">
+                                @include('workshops.partials.course-outline', [
+                                    'course' => $course,
+                                    'currentChapter' => $currentChapter,
+                                    'currentVideo' => $currentVideo,
+                                    'idSuffix' => 'mobile',
+                                ])
+                            </div>
                         </div>
 
 
                         <div class="tab-pane fade show p-3 border rounded" id="audio" role="tabpanel">
-                            <div class="row mb-5">
+                            <div class="row mb-5 gy-4">
                                 <div class="col-12">
                                     @if ($currentAudio)
                                         <div class="current-video-card p-lg-4">
-                                            <div class="row">
+                                            <div class="row align-items-start">
                                                 <div class="col-md-8">
                                                     <h4 class="fw-bold mb-3">{{ $currentAudio->title }}</h4>
                                                     <div class="video-thumbnail mb-3 position-relative">
@@ -343,31 +424,8 @@
                                                                 {{ $currentChapter->videos->count() }}</span>
                                                         </div>
 
-                                                    </div>
-                                                    <p class="text-muted">{{ $currentAudio->description }}</p>
-
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <h5 class="fw-bold mb-3">Up Next</h5>
-                                                    <div class="list-group">
-                                                        @foreach ($currentChapter->videos->where('video_type', 'audio') as $audio)
-                                                            <a href="{{ route('user.workshop.show', ['id' => $course->id, 'chapter_id' => $currentChapter->id, 'video_id' => $audio->id]) }}"
-                                                                class="list-group-item list-group-item-action d-flex align-items-center bg-transparent @if ($audio->id === $currentAudio->id) lesson-active @endif p-2 mb-2">
-                                                                <div class="flex-shrink-0">
-                                                                    <img src="https://placehold.co/80x45/FF8C5A/white?text={{ $audio->order }}"
-                                                                        class="rounded me-3" alt="Thumbnail">
-                                                                </div>
-                                                                <div class="flex-grow-1">
-                                                                    <h6 class="mb-1">{{ $audio->title }}</h6>
-                                                                    <small
-                                                                        class="text-muted">{{ $audio->duration }}</small>
-                                                                </div>
-                                                            </a>
-                                                        @endforeach
-
-                                                    </div>
-                                                </div>
                                             </div>
+                                            <p class="text-muted">{{ $currentAudio->description }}</p>
                                         </div>
                                     @endif
                                 </div>
@@ -430,3 +488,38 @@
     </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof bootstrap === 'undefined') {
+                return;
+            }
+
+            document.querySelectorAll('.toggle-sections-btn[data-outline-target]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-outline-target');
+                    const container = document.getElementById(targetId);
+
+                    if (!container) {
+                        return;
+                    }
+
+                    const collapses = container.querySelectorAll('.chapter-collapse');
+                    if (!collapses.length) {
+                        return;
+                    }
+
+                    const shouldExpand = Array.from(collapses).some(el => !el.classList.contains('show'));
+
+                    collapses.forEach(el => {
+                        const instance = bootstrap.Collapse.getOrCreateInstance(el, {toggle: false});
+                        shouldExpand ? instance.show() : instance.hide();
+                    });
+
+                    this.textContent = shouldExpand ? 'Collapse all sections' : 'Expand all sections';
+                });
+            });
+        });
+    </script>
+@endpush

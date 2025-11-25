@@ -277,41 +277,46 @@
                                 type="button" role="tab">
                                 <i class="fa-solid fa-video"></i>
                                 <span class="course-nav-text">
-                                    Video Lessons
+                                     Content
                                 </span>
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="audio-tab" data-bs-toggle="pill" data-bs-target="#audio"
-                                type="button" role="tab">
-                                <i class="fa-solid fa-headphones"></i>
+                        {{-- @if ($currentChapter->videos->where('video_type', 'audio')->count() > 0)
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="audio-tab" data-bs-toggle="pill" data-bs-target="#audio"
+                                    type="button" role="tab">
+                                    <i class="fa-solid fa-headphones"></i>
 
-                                <span class="course-nav-text">
-                                    Audio Files
-                                </span>
-                            </button>
-                        </li>
+                                    <span class="course-nav-text">
+                                        Audio Files
+                                    </span>
+                                </button>
+                            </li>
+                        @endif --}}
 
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pdfs-tab" data-bs-toggle="pill" data-bs-target="#pdfs"
-                                type="button" role="tab">
-                                <i class="fa-regular fa-file-pdf"></i>
+                        @if ($currentChapter->resources->where('type', 'pdf')->count() > 0)
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pdfs-tab" data-bs-toggle="pill" data-bs-target="#pdfs"
+                                    type="button" role="tab">
+                                    <i class="fa-regular fa-file-pdf"></i>
 
-                                <span class="course-nav-text">
-                                    Downloadable PDFs
-                                </span>
-                            </button>
-                        </li>
-
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="text-tab" data-bs-toggle="pill" data-bs-target="#text"
-                                type="button" role="tab">
-                                <i class="fa-regular fa-file-lines"></i>
-                                <span class="course-nav-text">
-                                    Text Explanations
-                                </span>
-                            </button>
-                        </li>
+                                    <span class="course-nav-text">
+                                        Downloadable PDFs
+                                    </span>
+                                </button>
+                            </li>
+                        @endif
+                        @if ($currentChapter->resources->where('type', 'text')->count() > 0)
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="text-tab" data-bs-toggle="pill" data-bs-target="#text"
+                                    type="button" role="tab">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                    <span class="course-nav-text">
+                                        Text Explanations
+                                    </span>
+                                </button>
+                            </li>
+                        @endif
                     </ul>
 
                     <!-- Tab Content -->
@@ -343,7 +348,7 @@
 
                                             </div>
                                         </div>
-                                       
+
                                         <p class="text-muted">{{ $currentVideo->description }}</p>
                                     </div>
                                 </div>
@@ -361,95 +366,103 @@
                                 'idSuffix' => 'mobile',
                             ])
                         </div>
-
-                        <div class="tab-pane fade p-3 border rounded" id="audio" role="tabpanel">
-                            <div class="row mb-5 gy-4">
-                                <div class="col-12">
-                                    @if ($currentAudio)
-                                        <div class="current-video-card p-lg-4">
-                                            <div class="row align-items-start">
-                                                <div class="col-md-8">
-                                                    <h4 class="fw-bold mb-3">{{ $currentAudio->title }}</h4>
-                                                    <div class="video-thumbnail mb-3 position-relative">
-                                                        <div id="vid_{{ $currentAudio->vturb_key }}"
-                                                            style="position: relative; width: 100%; padding: 56.25% 0 0;">
-                                                            <img id="thumb_{{ $currentAudio->vturb_key }}"
-                                                                src="https://images.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentAudio->vturb_key }}/thumbnail.jpg"
-                                                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;"
-                                                                alt="thumbnail">
-                                                            <div id="backdrop_{{ $currentAudio->vturb_key }}"
-                                                                style=" -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%; ">
+                        {{-- @if ($currentChapter->videos->where('video_type', 'audio')->count() > 0)
+                            <div class="tab-pane fade p-3 border rounded" id="audio" role="tabpanel">
+                                <div class="row mb-5 gy-4">
+                                    <div class="col-12">
+                                        @if ($currentAudio)
+                                            <div class="current-video-card p-lg-4">
+                                                <div class="row align-items-start">
+                                                    <div class="col-md-8">
+                                                        <h4 class="fw-bold mb-3">{{ $currentAudio->title }}</h4>
+                                                        <div class="video-thumbnail mb-3 position-relative">
+                                                            <div id="vid_{{ $currentAudio->vturb_key }}"
+                                                                style="position: relative; width: 100%; padding: 56.25% 0 0;">
+                                                                <img id="thumb_{{ $currentAudio->vturb_key }}"
+                                                                    src="https://images.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentAudio->vturb_key }}/thumbnail.jpg"
+                                                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block;"
+                                                                    alt="thumbnail">
+                                                                <div id="backdrop_{{ $currentAudio->vturb_key }}"
+                                                                    style=" -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; height: 100%; width: 100%; ">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <script type="text/javascript" id="scr_{{ $currentAudio->vturb_key }}">
-                                                            var s = document.createElement("script");
-                                                            s.src =
-                                                                "https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentAudio->vturb_key }}/player.js",
-                                                                s.async = !0, document.head.appendChild(s);
-                                                        </script>
+                                                            <script type="text/javascript" id="scr_{{ $currentAudio->vturb_key }}">
+                                                                var s = document.createElement("script");
+                                                                s.src =
+                                                                    "https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentAudio->vturb_key }}/player.js",
+                                                                    s.async = !0, document.head.appendChild(s);
+                                                            </script>
 
-                                                    </div>
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <div>
-                                                            <span class="badge bg-primary me-2">Video
-                                                                {{ $currentAudio->order }}</span>
-                                                            <span class="badge bg-secondary"> {{ $currentAudio->order }}
-                                                                of
-                                                                {{ $currentChapter->videos->count() }}</span>
                                                         </div>
+                                                        <div
+                                                            class="d-flex justify-content-between align-items-center mb-3">
+                                                            <div>
+                                                                <span class="badge bg-primary me-2">Video
+                                                                    {{ $currentAudio->order }}</span>
+                                                                <span class="badge bg-secondary">
+                                                                    {{ $currentAudio->order }}
+                                                                    of
+                                                                    {{ $currentChapter->videos->count() }}</span>
+                                                            </div>
 
+                                                        </div>
+                                                        <p class="text-muted">{{ $currentAudio->description }}</p>
                                                     </div>
-                                                    <p class="text-muted">{{ $currentAudio->description }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endif --}}
+
+                        @if ($currentChapter->resources->where('type', 'pdf')->count() > 0)
+                            <div class="tab-pane fade p-3 border rounded" id="pdfs" role="tabpanel">
+                                <h5>Downloadable PDFs</h5>
+                                <div class="d-flex">
+                                    <!-- Side Navigation -->
+                                    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+                                        aria-orientation="vertical">
+                                        @foreach ($currentChapter->resources->where('type', 'pdf') as $resource)
+                                            <button class="nav-link {{ $loop->first ? 'active' : '' }}"
+                                                id="v-pills-pdfs-tab" data-bs-toggle="pill"
+                                                data-bs-target="#v-pills-pdfs-{{ $loop->index }}" type="button"
+                                                role="tab" aria-controls="v-pills-pdfs-{{ $loop->index }}"
+                                                aria-selected="true">
+
+
+                                                {{ $loop->iteration }}. {{ $resource->title }}
+                                            </button>
+                                        @endforeach
+                                    </div>
+
+                                    <!-- Tab Content -->
+                                    <div class="tab-content" id="v-pills-tabContent">
+                                        @foreach ($currentChapter->resources->where('type', 'pdf') as $resource)
+                                            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                                                id="v-pills-pdfs-{{ $loop->index }}" role="tabpanel"
+                                                aria-labelledby="v-pills-pdfs-tab">
+                                                <h5>{{ $resource->title }}</h5>
+                                                <div class="container-pdf-viewer">
+                                                    @if ($resource->url)
+                                                        <iframe src="{{ url($resource->url) }}" class="w-100 h-100"
+                                                            frameborder="0"></iframe>
+                                                    @endif
+                                                    @if ($resource->embed != null)
+                                                        {!! $resource->embed !!}
+                                                    @endif
                                                 </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade p-3 border rounded" id="pdfs" role="tabpanel">
-                            <h5>Downloadable PDFs</h5>
-                            <div class="d-flex">
-                                <!-- Side Navigation -->
-                                <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
-                                    aria-orientation="vertical">
-                                    @foreach ($currentChapter->resources->where('type', 'pdf') as $resource)
-                                        <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="v-pills-pdfs-tab"
-                                            data-bs-toggle="pill" data-bs-target="#v-pills-pdfs-{{ $loop->index }}"
-                                            type="button" role="tab"
-                                            aria-controls="v-pills-pdfs-{{ $loop->index }}" aria-selected="true">
-
-
-                                            {{ $loop->iteration }}. {{ $resource->title }}
-                                        </button>
-                                    @endforeach
-                                </div>
-
-                                <!-- Tab Content -->
-                                <div class="tab-content" id="v-pills-tabContent">
-                                    @foreach ($currentChapter->resources->where('type', 'pdf') as $resource)
-                                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
-                                            id="v-pills-pdfs-{{ $loop->index }}" role="tabpanel"
-                                            aria-labelledby="v-pills-pdfs-tab">
-                                            <h5>{{ $resource->title }}</h5>
-                                            <div class="container-pdf-viewer">
-                                                @if ($resource->url)
-                                                    <iframe src="{{ url($resource->url) }}" class="w-100 h-100"
-                                                        frameborder="0"></iframe>
-                                                @endif
-                                                @if ($resource->embed != null)
-                                                    {!! $resource->embed !!}
-                                                @endif
                                             </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                        @endforeach
+                                    </div>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade p-3 border rounded" id="text" role="tabpanel">
-                            <h5>Text Explanations</h5>
-                            <p>Place your text-based module content here.</p>
-                        </div>
+                        @endif
+                        @if ($currentChapter->resources->where('type', 'text')->count() > 0)
+                            <div class="tab-pane fade p-3 border rounded" id="text" role="tabpanel">
+                                <h5>Text Explanations</h5>
+                                <p>Place your text-based module content here.</p>
+                            </div>
+                        @endif
                     </div>
 
 

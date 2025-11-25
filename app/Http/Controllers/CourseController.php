@@ -90,7 +90,7 @@ class CourseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'course_id' => 'required|exists:courses,sku',
+            'course_id' => 'required',
         ]);
 
         if ($validator->fails()) {

@@ -42,7 +42,8 @@ class MagicLinkController extends Controller
         // $user = (new User)->newInstance($response->customer, true);
         $user = new User([
             'id' => $customerData->id,
-            'name' => $customerData->name ?  $customerData->name : $customerData->first_name . ' ' . $customerData->last_name,
+            'first_name' => $customerData->first_name,
+            'last_name' => $customerData->last_name ?? "",
             'email' => $customerData->email,
             'password' => bcrypt("123456789")
         ]);
@@ -63,7 +64,7 @@ class MagicLinkController extends Controller
         if ($request->is('api/*')) {
             return response()->json([
                 'success' => true,
-                'data' => $magicLink,
+                'magic-link' => $magicLink,
                 'message' =>
                 $request->has('send_email') && $request->send_email == "1" ?
                     'We’ve sent you a magic link! Please check your email inbox or spam folder.'
@@ -85,12 +86,16 @@ class MagicLinkController extends Controller
             return redirect()->route('login')->with('error', 'The magic link is invalid or has expired.');
         }
 
-        $credentials = ["email" => $user->email, "password" => bcrypt("123456789")];
-        if (Auth::attempt($credentials)) {
-
+       $user = User::where('email', $user->email)->first();
+       if(!$user){
+        return redirect()->route('login')->with('error', 'No user found with this email address.');
+       }
+        if ($user) {
+            Auth::login($user);
             return redirect()->route('user.dashboard');
         } else {
-            return back()->with("error", "Issue error magic link login");
+            
+            return redirect()->route('login')->with('error', 'Issue error magic link login');
         }
     }
 }

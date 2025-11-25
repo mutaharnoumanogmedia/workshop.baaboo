@@ -261,7 +261,7 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li>
                                 <a class="dropdown-item" href="#">
-                                    <i class="bi bi-person me-2"></i> {{ Auth::user()->name }}
+                                    <i class="bi bi-person me-2"></i> {{ Auth::user()->full_name }}
                                 </a>
                             </li>
                             <li>

@@ -70,7 +70,8 @@ class MagicLinkService
         return new \App\Models\User(
             [
                 'id' => $userData->id,
-                'name' => $userData->name  ? $userData->name : $userData->first_name . " " . $userData->last_name,
+                'first_name' =>  $userData->first_name   ,
+                'last_name' =>  $userData->last_name ?? ""   ,
                 'email' => $userData->email,
                 'first_name' => $userData->first_name,
                 'last_name' => $userData->last_name,
@@ -87,78 +88,78 @@ class MagicLinkService
 
 
 
-    public function setSupportMagicLinkUser($email)
-    {
-        try {
-            $host = request()->getHost(); // e.g., customer.biovana.com
+    // public function setSupportMagicLinkUser($email)
+    // {
+    //     try {
+    //         $host = request()->getHost(); // e.g., customer.biovana.com
 
-            $baseDomain = Str::after($host, '.');
-
-
-            $curl = curl_init();
+    //         $baseDomain = Str::after($host, '.');
 
 
-
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => env("APP_SUPPORT_URL"),
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array('action' => 'createMagicLinkAPICall', 'api_key' => '1e4602bd9af3a88a4cf77b8084453652', 'email' => $email, 'brand_domain' => $baseDomain),
-
-            ));
-
-            $response = curl_exec($curl);
-
-            curl_close($curl);
-
-            // echo $response;
-
-            $data = json_decode($response, true);
-            $magicLink = $data['magicLink'] ?? "";
+    //         $curl = curl_init();
 
 
 
-            // This method can be used to set the user in the session or any other logic needed
-            session(['support_magic_link' => $magicLink]);
-        } catch (\Exception $e) {
-            // Handle the exception, log it, or return an error response
-            Log::error('Error setting support magic link user: ' . $e->getMessage());
-        }
-    }
+    //         curl_setopt_array($curl, array(
+    //             CURLOPT_URL => env("APP_SUPPORT_URL"),
+    //             CURLOPT_RETURNTRANSFER => true,
+    //             CURLOPT_ENCODING => '',
+    //             CURLOPT_MAXREDIRS => 10,
+    //             CURLOPT_TIMEOUT => 0,
+    //             CURLOPT_FOLLOWLOCATION => true,
+    //             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    //             CURLOPT_CUSTOMREQUEST => 'POST',
+    //             CURLOPT_POSTFIELDS => array('action' => 'createMagicLinkAPICall', 'api_key' => '1e4602bd9af3a88a4cf77b8084453652', 'email' => $email, 'brand_domain' => $baseDomain),
+
+    //         ));
+
+    //         $response = curl_exec($curl);
+
+    //         curl_close($curl);
+
+    //         // echo $response;
+
+    //         $data = json_decode($response, true);
+    //         $magicLink = $data['magicLink'] ?? "";
 
 
-    public function getBaabooBooksMagicLink($email, $first_name)
-    {
-        $response = Http::withToken(env("BAABOO_BOOKS_API_TOKEN"))
-            ->post(env("APP_BAABOO_BOOKS_URL"), [
-                'email' => $email,
-                'firstname' => $first_name,
-                // 'lastname' => $request->input('lastname'), // optional
-                // 'wawi_customer_number' => $request->input('wawi_customer_number'), // optional
-                'task' => 'create'
-            ]);
 
-        if ($response->successful()) {
-            $data = $response->json();
-            $magicLink = $data['response']['magic-link'];
+    //         // This method can be used to set the user in the session or any other logic needed
+    //         session(['support_magic_link' => $magicLink]);
+    //     } catch (\Exception $e) {
+    //         // Handle the exception, log it, or return an error response
+    //         Log::error('Error setting support magic link user: ' . $e->getMessage());
+    //     }
+    // }
 
-            // Store magic link in session
-            Session::put('baaboo_books_magic_link', $magicLink);
 
-            return response()->json([
-                'message' => 'Magic link stored in session.',
-                'magic_link' => $magicLink
-            ]);
-        }
+    // public function getBaabooBooksMagicLink($email, $first_name)
+    // {
+    //     $response = Http::withToken(env("BAABOO_BOOKS_API_TOKEN"))
+    //         ->post(env("APP_BAABOO_BOOKS_URL"), [
+    //             'email' => $email,
+    //             'firstname' => $first_name,
+    //             // 'lastname' => $request->input('lastname'), // optional
+    //             // 'wawi_customer_number' => $request->input('wawi_customer_number'), // optional
+    //             'task' => 'create'
+    //         ]);
 
-        return response()->json([
-            'message' => 'Failed to get magic link',
-            'error' => $response->body()
-        ], $response->status());
-    }
+    //     if ($response->successful()) {
+    //         $data = $response->json();
+    //         $magicLink = $data['response']['magic-link'];
+
+    //         // Store magic link in session
+    //         Session::put('baaboo_books_magic_link', $magicLink);
+
+    //         return response()->json([
+    //             'message' => 'Magic link stored in session.',
+    //             'magic_link' => $magicLink
+    //         ]);
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Failed to get magic link',
+    //         'error' => $response->body()
+    //     ], $response->status());
+    // }
 }

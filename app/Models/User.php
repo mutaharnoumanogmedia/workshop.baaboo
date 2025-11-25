@@ -21,7 +21,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
     ];
@@ -44,6 +45,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    
 
 
     public function subscriptions()
@@ -87,13 +90,16 @@ class User extends Authenticatable
 
     public function getInitialsAttribute()
     {
-        $names = explode(' ', $this->name);
-        $initials = '';
-        foreach ($names as $n) {
-            if (strlen($n) > 0) {
-                $initials .= strtoupper($n[0]);
-            }
+        $initials = strtoupper(substr($this->first_name, 0, 1));
+        if (!empty($this->last_name)) {
+            $initials .= strtoupper(substr($this->last_name, 0, 1));
         }
         return $initials;
+    }
+
+    public function getFullNameAttribute()
+    {
+        $fullName = $this->first_name  . " " . ($this->last_name ?? "");
+        return trim($fullName);
     }
 }

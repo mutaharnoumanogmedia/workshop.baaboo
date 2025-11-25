@@ -19,7 +19,8 @@ class UserFactory extends Factory
     {
         static $userNumber = 1;
         return [
-            'name' => 'user' . $userNumber,
+            'first_name' => 'user'  ,
+            'last_name' =>   $userNumber,
             'email' => 'user' . $userNumber++ . '@baaboo.com',
             'email_verified_at' => now(),
             'password' => bcrypt('baaboo123'), // password

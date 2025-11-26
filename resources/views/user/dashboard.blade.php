@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold">Welcome back, {{Auth::user()->first_name}}!</h2>
+        <h2 class="fw-bold">Welcome back, {{ Auth::user()->first_name }}!</h2>
         <p class="text-muted">Continue your learning journey</p>
     </div>
 
@@ -68,38 +68,7 @@
     <!-- Continue Learning -->
     <div class="mb-4">
         <h4 class="fw-bold mb-3">My Workshops</h4>
-        <div class="row">
-            @forelse ($myCourses as $course)
-                <div class="col-md-6 col-xl-4 d-flex">
-                    <article class="workshop-card w-100 d-flex flex-column">
-                        <div class="d-flex justify-content-between text-uppercase text-muted small">
-                            <span>{{ 'Inital Training' }}</span>
-                            <span>
-                                {{ \Carbon\Carbon::parse($course->created_at)->diffForHumans() }}</span>
-                        </div>
-                        <h2 class="mt-3 h4 fw-bold" style="color: #111827;">{{ $course->title }}</h2>
-                        <p class="text-muted mb-4 flex-grow-1">{{ Str::substr($course->description, 0, 100) }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="badge rounded-pill badge-soft">{{ $course->chapters->count() }} chapters</span>
-                               
-                            </div>
-                            <a href="{{ route('user.workshop.show', ['id' => $course->id]) }}"
-                                class="btn btn-coursepro rounded-pill px-4">
-                                Start now
-                            </a>
-                        </div>
-                    </article>
-                </div>
-            @empty
-                <div class="col-12">
-                    <div class="workshop-card text-center">
-                        <p class="h5 text-muted mb-2">No workshops yet</p>
-                        <p class="text-muted small mb-0">Assigned workshops will appear here.</p>
-                    </div>
-                </div>
-            @endforelse
-        </div>
+        <x-my-wrokshops-list :myCourses="$myCourses" />
     </div>
 
     <!-- All My Workshops -->

@@ -22,7 +22,11 @@ class Chapter extends Model
 
     public function videos()
     {
-        return $this->hasMany(Video::class);
+        return $this->hasMany(Video::class)->where('video_type', 'video');
+    }
+    public function audios()
+    {
+        return $this->hasMany(Video::class)->where('video_type', 'audio');
     }
 
     public function resources()

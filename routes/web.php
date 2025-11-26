@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\ProgramController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WorkshopController as AdminWorkshopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\WorkshopController;
@@ -65,6 +69,13 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
+    Route::resource('users', UserController::class)->names('admin.users');
+    Route::resource('programs', ProgramController::class)->names('admin.programs');
+    Route::resource('courses', CourseController::class)->names('admin.courses');
+
+    Route::resource("workshops", AdminWorkshopController::class)->names('admin.workshops');
+    Route::get('workshops/{id}/modules', [AdminWorkshopController::class, 'modules'])->name('admin.workshops.modules');
+
 });
 
 Route::prefix("user")->middleware(['auth', 'verified', 'role:user'])->group(function () {

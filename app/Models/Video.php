@@ -12,7 +12,11 @@ class Video extends Model
     protected $fillable = [
         'title',
         'description',
-        'url',
+        'video_type', // e.g., 'video', 'audio'
+        'chapter_id',
+        'vturb_key',
+        'duration',
+        'status'
     ];
 
     public function favoriteByUsers()

@@ -8,9 +8,9 @@ class WorkshopController extends Controller
 {
     public function index()
     {
-        $courses = Course::active()->myCourses()->get();
+        $myCourses = Course::active()->myCourses()->get();
 
-        return view('workshops.index', compact('courses'));
+        return view('workshops.index', compact('myCourses'));
     }
 
     public function show($id, $chapterId = null, $videoId = null)

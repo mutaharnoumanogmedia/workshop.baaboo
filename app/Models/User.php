@@ -46,7 +46,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    
+
 
 
     public function subscriptions()
@@ -83,7 +83,7 @@ class User extends Authenticatable
     }
     public function courses()
     {
-        return $this->hasMany(UserCourse::class);
+        return $this->belongsToMany(Course::class, 'user_courses');
     }
 
 

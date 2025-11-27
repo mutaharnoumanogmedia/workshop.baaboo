@@ -30,7 +30,7 @@
 
         .course-outline {
             border-radius: 12px;
-            background-color: #fff;
+            /* background-color: #fff; */
             box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
             overflow: hidden;
         }
@@ -321,7 +321,7 @@
                                 type="button" role="tab">
                                 <i class="fa-solid fa-video"></i>
                                 <span class="course-nav-text">
-                                    Content
+                                    Inhalt
                                 </span>
                             </button>
                         </li>
@@ -345,7 +345,7 @@
                                     <i class="fa-regular fa-file-pdf"></i>
 
                                     <span class="course-nav-text">
-                                        Downloadable PDFs
+                                        Herunterladbare PDFs
                                     </span>
                                 </button>
                             </li>
@@ -356,7 +356,7 @@
                                     type="button" role="tab">
                                     <i class="fa-regular fa-file-lines"></i>
                                     <span class="course-nav-text">
-                                        Text Explanations
+                                        Text Erklärungen
                                     </span>
                                 </button>
                             </li>
@@ -499,12 +499,12 @@
                         @endif
                         @if ($currentChapter->resources->where('type', 'text')->count() > 0)
                             <div class="tab-pane fade  rounded" id="text" role="tabpanel">
-                                <h5>Text Explanations</h5>
-                                <p>Place your text-based module content here.</p>
+                                <h5>Text Erklärungen</h5>
+                                <p>Pack hier einfach deinen Text-Inhalt fürs Modul rein.</p>
                             </div>
                         @endif
                     </div>
-                    <div class="d-lg-none mt-4">
+                    <div class="d-lg-none">
                         @include('workshops.partials.course-outline', [
                             'course' => $course,
                             'currentChapter' => $currentChapter,
@@ -525,8 +525,7 @@
 
 
     </div>
-    </div>
-    </div>
+
 @endsection
 
 @push('scripts')

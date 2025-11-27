@@ -5,8 +5,10 @@
 
 @section('content')
     <div class="mb-4">
-        <h2 class="fw-bold">Welcome back, {{ Auth::user()->first_name }}!</h2>
-        <p class="text-muted">Continue your learning journey</p>
+        <h2 class="fw-bold">Willkommen zurück, {{ Auth::user()->first_name }}!</h2>
+        <p class="text-muted">
+            Hier kannst du direkt mit deinen Workshops weitermachen oder neue entdecken. Viel Spaß beim Lernen!
+        </p>
     </div>
 
     {{-- <!-- Stats Cards -->
@@ -67,7 +69,9 @@
 
     <!-- Continue Learning -->
     <div class="mb-4">
-        <h4 class="fw-bold mb-3">My Workshops</h4>
+        <h4 class="fw-bold mb-3">
+            Meine Workshops
+        </h4>
         <x-my-wrokshops-list :myCourses="$myCourses" />
     </div>
 

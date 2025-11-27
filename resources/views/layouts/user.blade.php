@@ -332,9 +332,11 @@
                                     <hr class="dropdown-divider">
                                 </li> --}}
                                 <li><a class="dropdown-item" href="javascript:void(0)"
-                                        onclick="document.getElementById('logout-form').submit()"><i
-                                            class="bi bi-box-arrow-right me-2"></i>Sign
-                                        Out</a></li>
+                                        onclick="document.getElementById('logout-form').submit()">
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+                                        Abmelden
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -419,10 +421,12 @@
     <footer class="py-5 text-center text-muted small position-relative bottom-0 w-100 bg-light">
         © {{ now()->year }} — {{ env('APP_NAME') }}.
         <div class="w-100 text-center mt-2">
-            <a href="https://baaboo.com/pages/impressum" target="_blank" rel="noopener" class="mx-2 text-decoration-none text-dark">Impressum</a> |
+            <a href="https://baaboo.com/pages/impressum" target="_blank" rel="noopener"
+                class="mx-2 text-decoration-none text-dark">Impressum</a> |
             <a href="https://baaboo.com/datenschutzerklaerung" target="_blank" rel="noopener"
                 class="mx-2 text-decoration-none text-dark">Datenschutzerklärung</a> |
-            <a href="https://legal.baaboo.com/agb" target="_blank" rel="noopener" class="mx-2 text-decoration-none text-dark">AGBs</a>
+            <a href="https://legal.baaboo.com/agb" target="_blank" rel="noopener"
+                class="mx-2 text-decoration-none text-dark">AGBs</a>
 
         </div>
     </footer>

@@ -6,15 +6,17 @@
 @endphp
 
 <div class="p-3">
-    <h5 class="fw-bold mb-1" style="color: var(--primary-orange);">Course content</h5>
+    <h5 class="fw-bold mb-1" style="color: var(--primary-orange);">
+        Kursübersicht
+    </h5>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <p class="mb-0 text-muted small">
-            {{ $course->chapters->count() }} sections • {{ $totalLessons }} lectures
+            {{ $course->chapters->count() }} Abschnitte • {{ $totalLessons }} Lektionen
         </p>
         <button class="btn btn-link btn-sm text-decoration-none px-0 toggle-sections-btn"
             data-outline-target="{{ $outlineId }}">
-            Expand all sections
+            Alle Abschnitte erweitern
         </button>
     </div>
 
@@ -25,14 +27,14 @@
                     $isCurrentChapter = $chapter->id === $currentChapter->id;
                     $chapterCollapseId = 'chapter-' . $chapter->id . '-' . $idSuffix;
                 @endphp
-                <div class="section">
-                    <button class="section-header {{ $isCurrentChapter ? '' : 'collapsed' }}" type="button"
+                <div class="section mb-2">
+                    <button class="section-header {{ $isCurrentChapter ? '' : 'collapsed' }}  bg-white" type="button"
                         data-bs-toggle="collapse" data-bs-target="#{{ $chapterCollapseId }}"
                         aria-expanded="{{ $isCurrentChapter ? 'true' : 'false' }}"
                         aria-controls="{{ $chapterCollapseId }}">
                         <div>
-                            <p class="section-title mb-0">Section {{ $loop->iteration }}: {{ $chapter->title }}</p>
-                            <span class="section-meta">{{ $chapter->videos->count() }} lessons</span>
+                            <p class="section-title mb-0"> Abschnitt {{ $loop->iteration }}: {{ $chapter->title }}</p>
+                            <span class="section-meta">{{ $chapter->videos->count() }} Lektionen</span>
                         </div>
                         {{-- <div class="d-flex align-items-center gap-2 text-muted small">
                             <span>0% complete</span>
@@ -40,7 +42,7 @@
                         </div> --}}
                     </button>
                     <div id="{{ $chapterCollapseId }}"
-                        class="collapse chapter-collapse {{ $isCurrentChapter ? 'show' : '' }}">
+                        class="collapse chapter-collapse {{ $isCurrentChapter ? 'show' : '' }} bg-white">
                         <ul class="lessons">
                             @forelse ($chapter->videos->sortBy('order') as $lesson)
                                 @php
@@ -61,7 +63,7 @@
                                 </li>
                             @empty
                                 <li class="lesson-item text-muted small">
-                                    No lessons added yet
+                                    Keine Lektionen in diesem Abschnitt vorhanden.
                                 </li>
                             @endforelse
                         </ul>
@@ -71,4 +73,3 @@
         </div>
     </div>
 </div>
-

@@ -223,15 +223,41 @@
 
         .mobile-sticky-video {
             position: relative;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .mobile-sticky-video-placeholder {
+            display: none;
+            height: 0;
         }
 
         @media (max-width: 991px) {
+            .mobile-sticky-video-placeholder {
+                display: block;
+            }
+
             .mobile-sticky-video {
                 position: sticky;
                 top: 60px;
                 z-index: 10;
                 background: #fff;
                 padding-top: 1rem;
+            }
+
+            .mobile-sticky-video.mobile-sticky-video--fixed {
+                position: fixed;
+                top: var(--mobile-sticky-offset, 3px);
+                left: 0;
+                right: 0;
+                width: 100%;
+                margin: 0 auto;
+                z-index: 1050;
+                box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
+                padding: 0.5rem 1rem 1rem;
+            }
+
+            .mobile-sticky-video.mobile-sticky-video--fixed h4 {
+                margin-top: 0;
             }
 
             .chapters-sidebar .chapters-list {
@@ -326,6 +352,7 @@
                             @if ($currentVideo)
                                 <div class="row mb-5 gy-4 align-items-start">
                                     <div class="col-lg-12">
+                                        <div class="mobile-sticky-video-placeholder"></div>
                                         <div class="current-video-card p-lg-4 mobile-sticky-video">
                                             <h4 class="fw-bold mb-3">{{ $currentVideo->title }}</h4>
                                             <div class="video-thumbnail mb-3 position-relative">
@@ -484,37 +511,107 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof bootstrap === 'undefined') {
+            if (typeof bootstrap !== 'undefined') {
+                document.querySelectorAll('.toggle-sections-btn[data-outline-target]').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        const targetId = this.getAttribute('data-outline-target');
+                        const container = document.getElementById(targetId);
+
+                        if (!container) {
+                            return;
+                        }
+
+                        const collapses = container.querySelectorAll('.chapter-collapse');
+                        if (!collapses.length) {
+                            return;
+                        }
+
+                        const shouldExpand = Array.from(collapses).some(el => !el.classList.contains(
+                            'show'));
+
+                        collapses.forEach(el => {
+                            const instance = bootstrap.Collapse.getOrCreateInstance(el, {
+                                toggle: false
+                            });
+                            shouldExpand ? instance.show() : instance.hide();
+                        });
+
+                        this.textContent = shouldExpand ? 'Collapse all sections' :
+                            'Expand all sections';
+                    });
+                });
+            }
+
+            const stickyCard = document.querySelector('.mobile-sticky-video');
+            const placeholder = document.querySelector('.mobile-sticky-video-placeholder');
+            const videoFrame = stickyCard ? stickyCard.querySelector('.video-thumbnail') : null;
+            if (!stickyCard || !placeholder) {
                 return;
             }
 
-            document.querySelectorAll('.toggle-sections-btn[data-outline-target]').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    const targetId = this.getAttribute('data-outline-target');
-                    const container = document.getElementById(targetId);
+            let stickyAnchorTop = 0;
+            const getHeaderOffset = () => {
+                const header = document.querySelector('.navbar');
+                if (!header) {
+                    return 0;
+                }
 
-                    if (!container) {
-                        return;
+                const isFixed = header.classList.contains('fixed-top') ||
+                    window.getComputedStyle(header).position === 'fixed';
+
+                return isFixed ? header.offsetHeight + 6 : 0;
+            };
+
+            const getStickyHeight = () => {
+                const cardRect = stickyCard.getBoundingClientRect();
+                const videoRect = videoFrame ? videoFrame.getBoundingClientRect() : cardRect;
+                const styles = window.getComputedStyle(stickyCard);
+                const paddingTop = parseFloat(styles.paddingTop) || 0;
+                const paddingBottom = parseFloat(styles.paddingBottom) || 0;
+                return videoRect.height + paddingTop + paddingBottom;
+            };
+
+            const updateMetrics = () => {
+                stickyAnchorTop = placeholder.getBoundingClientRect().top + window.scrollY;
+                if (window.innerWidth > 991) {
+                    placeholder.style.height = '0px';
+                    stickyCard.classList.remove('mobile-sticky-video--fixed');
+                }
+            };
+
+            const toggleStickyVideo = () => {
+                if (window.innerWidth > 991) {
+                    stickyCard.classList.remove('mobile-sticky-video--fixed');
+                    placeholder.style.height = '0px';
+                    return;
+                }
+
+                const offset = getHeaderOffset();
+                stickyCard.style.setProperty('--mobile-sticky-offset', `${offset}px`);
+
+                if (window.scrollY + offset >= stickyAnchorTop) {
+                    const stickyHeight = getStickyHeight();
+                    if (placeholder.style.height !== `${stickyHeight}px`) {
+                        placeholder.style.height = `${stickyHeight}px`;
                     }
+                    stickyCard.classList.add('mobile-sticky-video--fixed');
+                } else {
+                    stickyCard.classList.remove('mobile-sticky-video--fixed');
+                    placeholder.style.height = '0px';
+                    stickyAnchorTop = placeholder.getBoundingClientRect().top + window.scrollY;
+                }
+            };
 
-                    const collapses = container.querySelectorAll('.chapter-collapse');
-                    if (!collapses.length) {
-                        return;
-                    }
+            updateMetrics();
+            toggleStickyVideo();
 
-                    const shouldExpand = Array.from(collapses).some(el => !el.classList.contains(
-                        'show'));
+            window.addEventListener('resize', function() {
+                updateMetrics();
+                toggleStickyVideo();
+            });
 
-                    collapses.forEach(el => {
-                        const instance = bootstrap.Collapse.getOrCreateInstance(el, {
-                            toggle: false
-                        });
-                        shouldExpand ? instance.show() : instance.hide();
-                    });
-
-                    this.textContent = shouldExpand ? 'Collapse all sections' :
-                        'Expand all sections';
-                });
+            window.addEventListener('scroll', toggleStickyVideo, {
+                passive: true
             });
         });
     </script>

@@ -34,10 +34,10 @@
                             <p class="section-title mb-0">Section {{ $loop->iteration }}: {{ $chapter->title }}</p>
                             <span class="section-meta">{{ $chapter->videos->count() }} lessons</span>
                         </div>
-                        <div class="d-flex align-items-center gap-2 text-muted small">
+                        {{-- <div class="d-flex align-items-center gap-2 text-muted small">
                             <span>0% complete</span>
                             <i class="bi bi-chevron-down section-chevron"></i>
-                        </div>
+                        </div> --}}
                     </button>
                     <div id="{{ $chapterCollapseId }}"
                         class="collapse chapter-collapse {{ $isCurrentChapter ? 'show' : '' }}">

@@ -147,9 +147,9 @@
         }
 
         .current-video-card {
-            background-color: white;
+            /* background-color: white; */
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
             overflow: hidden;
         }
 
@@ -167,8 +167,8 @@
         }
 
         .container-pdf-viewer {
-            min-width: 650px;
-            height: 600px;
+
+            height: 50vh;
             /* overflow: auto; */
         }
 
@@ -240,7 +240,7 @@
                 position: sticky;
                 top: 60px;
                 z-index: 10;
-                background: #fff;
+                /* background: #fff; */
                 padding-top: 1rem;
             }
 
@@ -254,6 +254,7 @@
                 z-index: 1050;
                 box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
                 padding: 0.5rem 1rem 1rem;
+                background: #fff;
             }
 
             .mobile-sticky-video.mobile-sticky-video--fixed h4 {
@@ -266,7 +267,24 @@
 
             .container-pdf-viewer {
                 width: 100%;
-                height: 600px;
+                height: auto;
+            }
+
+        }
+
+        @media (max-width: 576px) {
+            .video-thumbnail iframe {
+                height: 240px;
+            }
+
+            .container-pdf-viewer {
+                width: 100%;
+                height: 30vh;
+            }
+
+            .container-pdf-viewer iframe {
+                width: 100%;
+                height: 100%;
             }
         }
     </style>
@@ -297,13 +315,13 @@
 
                 <div class="">
                     <!-- Nav Pills -->
-                    <ul class="nav nav-pills mb-3" id="otherModulesTabs" role="tablist">
+                    <ul class="nav nav-pills mb-3 course-module-navigation" id="otherModulesTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="video-tab" data-bs-toggle="pill" data-bs-target="#video"
                                 type="button" role="tab">
                                 <i class="fa-solid fa-video"></i>
                                 <span class="course-nav-text">
-                                     Content
+                                    Content
                                 </span>
                             </button>
                         </li>
@@ -347,10 +365,10 @@
 
                     <!-- Tab Content -->
                     <div class="tab-content" id="otherModulesContent">
-                        <div class="tab-pane fade show active p-3 border rounded" id="video" role="tabpanel">
+                        <div class="tab-pane fade show active  rounded" id="video" role="tabpanel">
                             <!-- Current Video Section -->
                             @if ($currentVideo)
-                                <div class="row mb-5 gy-4 align-items-start">
+                                <div class="row   gy-4 align-items-start">
                                     <div class="col-lg-12">
                                         <div class="mobile-sticky-video-placeholder"></div>
                                         <div class="current-video-card p-lg-4 mobile-sticky-video">
@@ -385,14 +403,7 @@
 
 
 
-                        <div class="d-lg-none mt-4">
-                            @include('workshops.partials.course-outline', [
-                                'course' => $course,
-                                'currentChapter' => $currentChapter,
-                                'currentVideo' => $currentVideo,
-                                'idSuffix' => 'mobile',
-                            ])
-                        </div>
+
                         {{-- @if ($currentChapter->videos->where('video_type', 'audio')->count() > 0)
                             <div class="tab-pane fade p-3 border rounded" id="audio" role="tabpanel">
                                 <div class="row mb-5 gy-4">
@@ -442,11 +453,11 @@
                         @endif --}}
 
                         @if ($currentChapter->resources->where('type', 'pdf')->count() > 0)
-                            <div class="tab-pane fade p-3 border rounded" id="pdfs" role="tabpanel">
+                            <div class="tab-pane fade  rounded" id="pdfs" role="tabpanel">
                                 <h5>Downloadable PDFs</h5>
-                                <div class="d-flex">
+                                <div class="row">
                                     <!-- Side Navigation -->
-                                    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+                                    <div class="nav flex-column nav-pills col-lg-2" id="v-pills-tab" role="tablist"
                                         aria-orientation="vertical">
                                         @foreach ($currentChapter->resources->where('type', 'pdf') as $resource)
                                             <button class="nav-link {{ $loop->first ? 'active' : '' }}"
@@ -462,34 +473,44 @@
                                     </div>
 
                                     <!-- Tab Content -->
-                                    <div class="tab-content" id="v-pills-tabContent">
-                                        @foreach ($currentChapter->resources->where('type', 'pdf') as $resource)
-                                            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
-                                                id="v-pills-pdfs-{{ $loop->index }}" role="tabpanel"
-                                                aria-labelledby="v-pills-pdfs-tab">
-                                                <h5>{{ $resource->title }}</h5>
-                                                <div class="container-pdf-viewer">
-                                                    @if ($resource->url)
-                                                        <iframe src="{{ url($resource->url) }}" class="w-100 h-100"
-                                                            frameborder="0"></iframe>
-                                                    @endif
-                                                    @if ($resource->embed != null)
-                                                        {!! $resource->embed !!}
-                                                    @endif
+                                    <div class="col-lg-10">
+                                        <div class="tab-content" id="v-pills-tabContent">
+                                            @foreach ($currentChapter->resources->where('type', 'pdf') as $resource)
+                                                <div class="tab-pane  fade {{ $loop->first ? 'show active' : '' }}"
+                                                    id="v-pills-pdfs-{{ $loop->index }}" role="tabpanel"
+                                                    aria-labelledby="v-pills-pdfs-tab">
+                                                    <h5>{{ $resource->title }}</h5>
+                                                    <div class="container-pdf-viewer w-100">
+                                                        @if ($resource->url)
+                                                            <iframe src="{{ url($resource->url) }}" class=""
+                                                                frameborder="0"></iframe>
+                                                        @endif
+                                                        @if ($resource->embed != null)
+                                                            {!! $resource->embed !!}
+                                                        @endif
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        </div>
                                     </div>
 
                                 </div>
                             </div>
                         @endif
                         @if ($currentChapter->resources->where('type', 'text')->count() > 0)
-                            <div class="tab-pane fade p-3 border rounded" id="text" role="tabpanel">
+                            <div class="tab-pane fade  rounded" id="text" role="tabpanel">
                                 <h5>Text Explanations</h5>
                                 <p>Place your text-based module content here.</p>
                             </div>
                         @endif
+                    </div>
+                    <div class="d-lg-none mt-4">
+                        @include('workshops.partials.course-outline', [
+                            'course' => $course,
+                            'currentChapter' => $currentChapter,
+                            'currentVideo' => $currentVideo,
+                            'idSuffix' => 'mobile',
+                        ])
                     </div>
 
 
@@ -526,8 +547,9 @@
                             return;
                         }
 
-                        const shouldExpand = Array.from(collapses).some(el => !el.classList.contains(
-                            'show'));
+                        const shouldExpand = Array.from(collapses).some(el => !el.classList
+                            .contains(
+                                'show'));
 
                         collapses.forEach(el => {
                             const instance = bootstrap.Collapse.getOrCreateInstance(el, {
@@ -559,7 +581,7 @@
                 const isFixed = header.classList.contains('fixed-top') ||
                     window.getComputedStyle(header).position === 'fixed';
 
-                return isFixed ? header.offsetHeight + 6 : 0;
+                return isFixed ? header.offsetHeight + 2 : 0;
             };
 
             const getStickyHeight = () => {
@@ -612,6 +634,23 @@
 
             window.addEventListener('scroll', toggleStickyVideo, {
                 passive: true
+            });
+
+            document.querySelectorAll('.course-module-navigation .nav-link').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelector('.mobile-sticky-video').classList.remove(
+                        'mobile-sticky-video--fixed');
+                });
+            });
+
+            window.addEventListener('scroll', function() {
+                if (window.scrollY === 0) {
+                    const sticky = document.querySelector('.mobile-sticky-video');
+                    if (sticky) {
+                        sticky.classList.remove('mobile-sticky-video--fixed');
+                        placeholder.style.height = '0px';
+                    }
+                }
             });
         });
     </script>

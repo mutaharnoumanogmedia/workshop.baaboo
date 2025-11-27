@@ -22,14 +22,30 @@
             background-color: #f8f9fa;
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
+        @media (min-width: 1400px) {
+
+            .container,
+            .container-lg,
+            .container-md,
+            .container-sm,
+            .container-xl,
+            .container-xxl {
+                max-width: 1500px;
+            }
+        }
+
         .bg-primary {
             background-color: var(--primary-orange) !important;
         }
-        .nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+
+        .nav-pills .nav-link.active,
+        .nav-pills .show>.nav-link {
             background-color: var(--primary-orange);
             color: white;
         }
-        .nav-link{
+
+        .nav-link {
             color: var(--primary-orange);
         }
 
@@ -256,14 +272,13 @@
             color: var(--primary-orange) !important;
             font-weight: 700;
         }
-
     </style>
     @stack('styles')
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-sm  navbar-light navbar-coursepro">
+    <nav class="navbar navbar-expand-sm  navbar-light navbar-coursepro fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold me-5" href="#" style="color: var(--primary-orange);">
                 <img src="{{ url('template/logo.png') }}" class="h-auto img-fluid" style="width: 100px" alt="logo">
@@ -302,7 +317,7 @@
                                         <i class="bi bi-person me-2"></i> {{ Auth::user()->full_name }}
                                     </a>
                                 </li>
-                                 <li>
+                                <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
@@ -393,7 +408,7 @@
                     </ul>
                 </div> --}}
                 <div class="content-wrapper p-lg-4">
-                    <div class="container-fluid">
+                    <div class="container-fluid my-5 py-4">
                         @yield('content')
                     </div>
                 </div>

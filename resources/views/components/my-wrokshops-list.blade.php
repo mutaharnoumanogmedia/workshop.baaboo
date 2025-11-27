@@ -5,7 +5,7 @@
                 <article class="workshop-card w-100 d-flex flex-column">
                     <div class="d-flex justify-content-between text-uppercase text-muted small">
                         <span>
-                            Erstschulungs-Workshop
+                            Erster Workshop
                         </span>
                         <span>
                             <?php

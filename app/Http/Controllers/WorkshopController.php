@@ -17,10 +17,10 @@ class WorkshopController extends Controller
     {
         $course = Course::findOrFail($id)->load('chapters.videos');
         $currentChapter = $chapterId ? $course->chapters->firstWhere('id', $chapterId) : $course->chapters->first();
-        $currentVideo = $videoId && $currentChapter ? $currentChapter->videos->firstWhere('id', $videoId) : ($currentChapter ? $currentChapter->videos->first() : null);
-        $currentAudio = $videoId && $currentChapter ? $currentChapter->videos->firstWhere('video_type', 'audio') : ($currentChapter ? $currentChapter->videos->where('video_type', 'audio')->first() : null);
+        $currentVideo = $videoId && $currentChapter ? $currentChapter->contents->firstWhere('id', $videoId) : ($currentChapter ? $currentChapter->contents->first() : null);
+        // $currentAudio = $videoId && $currentChapter ? $currentChapter->videos->firstWhere('video_type', 'audio') : ($currentChapter ? $currentChapter->videos->where('video_type', 'audio')->first() : null);
 
-        return view('workshops.show', compact('course', 'currentChapter', 'currentVideo', 'currentAudio'));
+        return view('workshops.show', compact('course', 'currentChapter', 'currentVideo'));
     }
 
     public function module($id,  $moduleId)

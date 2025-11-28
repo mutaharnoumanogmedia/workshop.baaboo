@@ -26,7 +26,12 @@ class Chapter extends Model
     }
     public function audios()
     {
-        return $this->hasMany(Video::class)->where('video_type', 'audio');
+        return $this->hasMany(Video::class)->where('video_type', 'audio')->orderBy('id', 'asc');
+    }
+
+    public function contents()
+    {
+        return $this->hasMany(Video::class)->orderBy('id', 'asc');
     }
 
     public function resources()

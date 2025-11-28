@@ -125,17 +125,21 @@ class CourseController extends Controller
                 'success' => true,
                 'message' => 'User already enrolled in this course',
                 'user' => $user,
-                'course' => $course
+                'course' => $course,
+                'user_course' => $userCourse
             ], 200);
         }
 
         $userCourse = $user->courses()->firstOrCreate(['course_id' => $course->id]);
+        
 
         return response()->json([
             'success' => true,
             'message' => 'User created and course attached successfully',
             'user' => $user,
-            'course' => $course
+            'course' => $course,
+            'user_course' => $userCourse
+
         ]);
     }
 }

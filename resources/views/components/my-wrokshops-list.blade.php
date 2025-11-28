@@ -8,11 +8,9 @@
                             Erster Workshop
                         </span>
                         <span>
-                            <?php
-                            \Carbon\Carbon::setLocale('de');
-                            
-                            ?>
-                            {{ \Carbon\Carbon::parse($course->created_at)->diffForHumans() }}</span>
+                            <?php \Carbon\Carbon::setLocale('de'); ?>
+                            {{ \Carbon\Carbon::parse($course->created_at)->diffForHumans() }}
+                        </span>
                     </div>
                     <h2 class="mt-3 h4 fw-bold" style="color: #111827;">{{ $course->title }}</h2>
                     <p class="text-muted mb-4 flex-grow-1">{{ Str::substr($course->description, 0, 100) }}</p>

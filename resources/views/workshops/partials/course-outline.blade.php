@@ -1,6 +1,6 @@
 @php
     $totalLessons = $course->chapters->reduce(function ($carry, $chapter) {
-        return $carry + $chapter->videos->count();
+        return $carry + $chapter->videos->count() + $chapter->audios->count();
     }, 0);
     $outlineId = 'chapters-sidenav-' . $idSuffix;
 @endphp
@@ -12,7 +12,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <p class="mb-0 text-muted small">
-            {{ $course->chapters->count() }} Abschnitte • {{ $totalLessons }} Lektionen
+            {{ $course->chapters->count() }} Lektionen • {{ $totalLessons }} Videos
         </p>
         <button class="btn btn-link btn-sm text-decoration-none px-0 toggle-sections-btn"
             data-outline-target="{{ $outlineId }}">
@@ -26,6 +26,8 @@
                 @php
                     $isCurrentChapter = $chapter->id === $currentChapter->id;
                     $chapterCollapseId = 'chapter-' . $chapter->id . '-' . $idSuffix;
+
+                    $lessons = $chapter->videos->sortBy('order')->concat($chapter->audios->sortBy('order'));
                 @endphp
                 <div class="section mb-2">
                     <button class="section-header {{ $isCurrentChapter ? '' : 'collapsed' }}  bg-white" type="button"
@@ -33,8 +35,11 @@
                         aria-expanded="{{ $isCurrentChapter ? 'true' : 'false' }}"
                         aria-controls="{{ $chapterCollapseId }}">
                         <div>
-                            <p class="section-title mb-0"> Abschnitt {{ $loop->iteration }}: {{ $chapter->title }}</p>
-                            <span class="section-meta">{{ $chapter->videos->count() }} Lektionen</span>
+                            <p class="section-title mb-0">
+                                {{ $chapter->order > 0 ? "Lektion {$chapter->order}: " : '' }} {{ $chapter->title }}
+                            </p>
+                            <span class="section-meta">{{ $lessons->count() }}
+                                Videos</span>
                         </div>
                         {{-- <div class="d-flex align-items-center gap-2 text-muted small">
                             <span>0% complete</span>
@@ -44,7 +49,8 @@
                     <div id="{{ $chapterCollapseId }}"
                         class="collapse chapter-collapse {{ $isCurrentChapter ? 'show' : '' }} bg-white">
                         <ul class="lessons">
-                            @forelse ($chapter->videos->sortBy('order') as $lesson)
+
+                            @forelse ($lessons as $lesson)
                                 @php
                                     $isActiveVideo = $currentVideo && $lesson->id === $currentVideo->id;
                                 @endphp

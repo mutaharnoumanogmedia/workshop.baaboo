@@ -557,8 +557,8 @@
                             shouldExpand ? instance.show() : instance.hide();
                         });
 
-                        this.textContent = shouldExpand ? 'Collapse all sections' :
-                            'Expand all sections';
+                        this.textContent = shouldExpand ? 'Alle Abschnitte ausblenden' :
+                            'Alle Abschnitte ausklappen';
                     });
                 });
             }

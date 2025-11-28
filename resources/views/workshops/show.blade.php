@@ -3,7 +3,7 @@
 @if ($currentVideo)
     @section('title', $currentVideo->title . ' - ' . $course->title)
 @endif
-@if ($currentVideo && $currentVideo->vturb_key)
+{{-- @if ($currentVideo && $currentVideo->vturb_key)
     @section('header')
         <link rel="preload"
             href="https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/player.js"
@@ -20,7 +20,7 @@
         <link rel="dns-prefetch" href="https://images.converteai.net">
         <link rel="dns-prefetch" href="https://api.vturb.com.br">
     @endsection
-@endif
+@endif --}}
 
 @push('styles')
     <style>
@@ -374,7 +374,7 @@
                                         <div class="current-video-card p-lg-4 mobile-sticky-video">
                                             <h4 class="fw-bold mb-3">{{ $currentVideo->title }}</h4>
                                             <div class="video-thumbnail mb-3 position-relative">
-                                                <div id="vid_{{ $currentVideo->vturb_key }}"
+                                                {{-- <div id="vid_{{ $currentVideo->vturb_key }}"
                                                     style="position: relative; width: 100%; padding: 56.25% 0 0;">
                                                     <img id="thumb_{{ $currentVideo->vturb_key }}"
                                                         src="https://images.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/thumbnail.jpg"
@@ -389,8 +389,15 @@
                                                     s.src =
                                                         "https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/player.js",
                                                         s.async = !0, document.head.appendChild(s);
+                                                </script> --}}
+                                                <vturb-smartplayer id="vid-{{ $currentVideo->vturb_key }}"
+                                                    style="display: block; margin: 0 auto; width: 100%; "></vturb-smartplayer>
+                                                <script type="text/javascript">
+                                                    var s = document.createElement("script");
+                                                    s.src =
+                                                        "https://scripts.converteai.net/1bbf3f59-5ee7-48db-bbc8-4de570e093db/players/{{ $currentVideo->vturb_key }}/v4/player.js",
+                                                        s.async = !0, document.head.appendChild(s);
                                                 </script>
-
                                             </div>
                                         </div>
 
